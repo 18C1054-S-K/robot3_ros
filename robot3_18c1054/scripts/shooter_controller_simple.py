@@ -5,7 +5,7 @@ import math
 import rospy
 from std_msgs.msg import Float32MultiArray, Bool, Float32
 from sensor_msgs.msg import Joy
-from test.srv import GetInitTime, GetInitTimeResponse
+from robot3_18c1054.srv import GetInitTime, GetInitTimeResponse
 
 class ShooterControllerNode():
 	DEFAULT_BALL_INITIAL_SPEED = 5.0

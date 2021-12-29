@@ -5,8 +5,8 @@ import math
 import numpy as np
 import rospy
 from std_msgs.msg import Bool, Float32, Float32MultiArray
-from test.msg import HandClose
-from test.srv import GetHandState, GetHandStateResponse, GetInitTime, GetInitTimeResponse
+from robot3_18c1054.msg import HandClose
+from robot3_18c1054.srv import GetHandState, GetHandStateResponse, GetInitTime, GetInitTimeResponse
 
 class ArmControllerNode():
 	DELTA_TIME = 0.1

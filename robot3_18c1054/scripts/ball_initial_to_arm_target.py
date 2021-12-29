@@ -4,7 +4,7 @@ import math
 import numpy as np
 import rospy
 from std_msgs.msg import Float32MultiArray, Float32
-from test.srv import GetHandState, GetHandStateResponse
+from robot3_18c1054.srv import GetHandState, GetHandStateResponse
 
 
 class BallToTargetNode():

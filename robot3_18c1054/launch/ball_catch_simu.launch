@@ -1,0 +1,13 @@
+<launch>
+	<arg name="model" default="$(find test)/urdf/arm_with_ball.urdf"/>
+
+	<param name="robot_description" textfile="$(arg model)"/>
+	<param name="use_gui" value="true"/>
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find test)/rviz/urdf.rviz" required="true"/>
+	<node pkg="test" name="visualizer" type="visualizer.py" output="screen" />
+	<node pkg="test" name="shooter_controller_simple" type="shooter_controller_simple.py" output="screen"/>
+	<node pkg="test" name="arm_controller" type="arm_controller.py" output="screen"/>
+	<node pkg="test" name="ball_initial_to_arm_target" type="ball_initial_to_arm_target.py" output="screen" />
+</launch>

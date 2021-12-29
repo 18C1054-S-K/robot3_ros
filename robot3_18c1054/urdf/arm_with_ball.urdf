@@ -1,0 +1,251 @@
+<robot name="arm">
+	<link name="base_link"/>
+	
+
+	<!--  arm  -->
+	
+	<joint name="joint_0" type="fixed">
+		<parent link="base_link"/>
+		<child link="link_0"/>
+	</joint>
+		<link name="link_0">
+		<visual>
+			<geometry>
+				<cylinder length="0.1" radius="0.05"/>
+			</geometry>
+			<origin xyz="0 0.0 0.05" rpy="0 0 0"/>
+			<material name="red">
+				<color rgba="1.0 0.0 0.0 1.0"/>
+			</material>
+		</visual>
+	</link>
+	
+	<joint name="joint_1" type="revolute">
+		<parent link="link_0"/>
+		<child link="link_1"/>
+		<origin xyz="0.0 0.0 0.1" rpy="0 0 0"/>
+		<limit lower="-4.0" upper="4.0" effort="0" velocity="0"/>
+		<axis xyz="0 1 0"/>
+	</joint>
+	<link name="link_1">
+		<visual>
+			<geometry>
+				<cylinder length="0.2" radius="0.05"/>
+			</geometry>
+			<origin xyz="0 0.0 0.1" rpy="0 0 0"/>
+			<material name="red"/>
+		</visual>
+	</link>
+
+	<joint name="joint_2" type="revolute">
+		<parent link="link_1"/>
+		<child link="link_2"/>
+		<origin xyz="0.0 0.0 0.2" rpy="0 0 0"/>
+		<limit lower="-4.0" upper="4.0" effort="0" velocity="0"/>
+		<axis xyz="0 0 1"/>
+	</joint>
+	<link name="link_2">
+		<visual>
+			<geometry>
+				<box size="0.1 0.1 0.1"/>
+			</geometry>
+			<origin xyz="0 0.0 0.05" rpy="0 0 0"/>
+			<material name="blue">
+				<color rgba="0.0 0.0 1.0 1.0"/>
+			</material>
+		</visual>
+	</link>
+
+	<joint name="joint_3" type="revolute">
+		<parent link="link_2"/>
+		<child link="link_3"/>
+		<origin xyz="0.0 0.0 0.1" rpy="0 0 0"/>
+		<limit lower="-4.0" upper="4.0" effort="0" velocity="0"/>
+		<axis xyz="0 1 0"/>
+	</joint>
+	<link name="link_3">
+		<visual>
+			<geometry>
+				<cylinder length="0.15" radius="0.05"/>
+			</geometry>
+			<origin xyz="0 0.0 0.075" rpy="0 0 0"/>
+			<material name="red"/>
+		</visual>
+	</link>
+
+	<joint name="joint_4" type="revolute">
+		<parent link="link_3"/>
+		<child link="link_4"/>
+		<origin xyz="0.0 0.0 0.15" rpy="0 0 0"/>
+		<limit lower="-4.0" upper="4.0" effort="0" velocity="0"/>
+		<axis xyz="0 0 1"/>
+	</joint>
+	<link name="link_4">
+		<visual>
+			<geometry>
+				<box size="0.1 0.1 0.1"/>
+			</geometry>
+			<origin xyz="0 0.0 0.05" rpy="0 0 0"/>
+			<material name="blue"/>
+		</visual>
+	</link>
+
+	<joint name="joint_5" type="revolute">
+		<parent link="link_4"/>
+		<child link="link_5"/>
+		<origin xyz="0.0 0.0 0.1" rpy="0 0 0"/>
+		<limit lower="-4.0" upper="4.0" effort="0" velocity="0"/>
+		<axis xyz="0 1 0"/>
+	</joint>
+	<link name="link_5">
+		<visual>
+			<geometry>
+				<cylinder length="0.02" radius="0.025"/>
+			</geometry>
+			<origin xyz="0 0.0 0.01" rpy="0 0 0"/>
+			<material name="red"/>
+		</visual>
+	</link>
+
+	<joint name="joint_6" type="revolute">
+		<parent link="link_5"/>
+		<child link="link_6"/>
+		<origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+		<limit lower="-4.0" upper="4.0" effort="0" velocity="0"/>
+		<axis xyz="1 0 0"/>
+	</joint>
+	<link name="link_6"/>
+
+
+	<!--  hand  -->
+	
+	<joint name="hand_1" type="revolute">
+		<parent link="link_6"/>
+		<child link="handlink_1"/>
+		<origin xyz="0.0 0.01 0.02" rpy="0 0 0"/>
+		<limit lower="-1.5" upper="1.5" effort="0" velocity="0"/>
+		<axis xyz="-1 0 0"/>
+	</joint>
+	<link name="handlink_1">
+		<visual>
+			<geometry>
+				<box size="0.1 0.03 0.15"/>
+			</geometry>
+			<origin xyz="0.0 0.015 0.075" rpy="0 0 0"/>
+			<material name="yellow">
+				<color rgba="1.0 1.0 0.0 1.0"/>
+			</material>
+		</visual>
+	</link>
+
+	<joint name="hand_2" type="revolute">
+		<parent link="link_6"/>
+		<child link="handlink_2"/>
+		<origin xyz="0.0 -0.01 0.02" rpy="0 0 0"/>
+		<limit lower="-1.5" upper="1.5" effort="0" velocity="0"/>
+		<axis xyz="1 0 0"/>
+	</joint>
+	<link name="handlink_2">
+		<visual>
+			<geometry>
+				<box size="0.1 0.03 0.15"/>
+			</geometry>
+			<origin xyz="0.0 -0.015 0.075" rpy="0 0 0"/>
+			<material name="yellow"/>
+		</visual>
+	</link>
+
+
+	<!--  shooter  -->
+	
+	<joint name="shooter_x" type="prismatic">
+		<parent link="base_link"/>
+		<child link="sx"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<limit lower="-10" upper="10" effort="0" velocity="0"/>
+		<axis xyz="0 1 0"/>
+	</joint>
+	<link name="sx"/>
+	
+	<joint name="shooter_z" type="prismatic">
+		<parent link="sx"/>
+		<child link="sz"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<limit lower="-10" upper="10" effort="0" velocity="0"/>
+		<axis xyz="1 0 0"/>
+	</joint>
+	<link name="sz"/>
+	
+	<joint name="shooter_roll" type="revolute">
+		<parent link="sz"/>
+		<child link="shooter_base"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<limit lower="-3.0" upper="3.0" effort="0" velocity="0"/>
+		<axis xyz="0 0 1"/>
+	</joint>
+	<link name="shooter_base">
+		<visual>
+			<geometry>
+				<box size="0.2 0.1 0.04"/>
+			</geometry>
+			<origin xyz="0 0 -0.02" rpy="0 0 0"/>
+			<material name="blue"/>
+		</visual>
+	</link>
+
+	<joint name="shooter_pitch" type="revolute">
+		<parent link="shooter_base"/>
+		<child link="shooter_slope"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<limit lower="-1.0" upper="3.0" effort="0" velocity="0"/>
+		<axis xyz="0 -1 0"/>
+	</joint>
+	<link name="shooter_slope">
+		<visual>
+			<geometry>
+				<box size="0.1 0.1 0.04"/>
+			</geometry>
+			<origin xyz="0.05 0 -0.02" rpy="0 0 0"/>
+			<material name="blue"/>
+		</visual>
+	</link>
+
+
+	<!--  ball  -->
+
+	<joint name="ball_x" type="prismatic">
+		<parent link="base_link"/>
+		<child link="bx"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<limit lower="-10" upper="10" effort="0" velocity="0"/>
+		<axis xyz="0 1 0"/>
+	</joint>
+	<link name="bx"/>
+
+	<joint name="ball_y" type="prismatic">
+		<parent link="bx"/>
+		<child link="by"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<limit lower="-10" upper="10" effort="0" velocity="0"/>
+		<axis xyz="0 0 1"/>
+	</joint>
+	<link name="by"/>
+
+	<joint name="ball_z" type="prismatic">
+		<parent link="by"/>
+		<child link="ball"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<limit lower="-10" upper="10" effort="0" velocity="0"/>
+		<axis xyz="1 0 0"/>
+	</joint>
+	<link name="ball">
+		<visual>
+			<geometry>
+				<sphere radius="0.03"/>
+			</geometry>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<material name="red"/>
+		</visual>
+	</link>
+
+</robot>

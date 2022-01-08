@@ -9,7 +9,7 @@ time
 numpy
 
 # 配置
-![screenshot](./screenshot.png)
+![screenshot](./images/rviz_screenshot.png)
 
 # 概要
 コマンドを用いて発射台の位置、姿勢、初速を指定し、ボールを発射します。
@@ -25,14 +25,15 @@ numpy
 
 # 諸々のパラメータ
 ### マニピュレータ
-![arm]()
+![arm](./images/arm.png)
 
 質量は設定されていません。
 ##### 基準姿勢と各リンクの長さ
-![arm_base_attitude]()
+![arm_base_attitude](./images/arm_base_attitude.png)
 ##### ハンドの寸法
 ![hand]()
 ### 発射台
+![shooter](./images/shooter.png)
 大きさ、質量などは設定されていません。
 ##### 基準姿勢
 ![shooter_base_attitude]()
@@ -71,7 +72,7 @@ rostopic pub -1 /shoot_value std_msgs/Float32 "data: v_0"
 ```
 # ROSノード、トピック、サービス
 ## ノード、トピックの関係
-![nodes](./nodes.png)
+![nodes](./images/nodes.png)
 ## 各トピックについて
 ### /shooter_state_input
 std_msgs/Float32MultiArray型

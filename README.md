@@ -9,12 +9,12 @@ time
 numpy
 
 # 配置
-現在画像準備中
+![screenshot](./screenshot.png)
 
 # 概要
 コマンドを用いて発射台の位置、姿勢、初速を指定し、ボールを発射します。
 
-マニピュレータは発射されたボールの最高到達点に向かって動き、最高到達点に達する時刻にハンドを閉じます。
+マニピュレータは発射されたボールの最高到達点(y座標が最も大きくなる位置)に向かって動き、最高到達点に達する時刻にハンドを閉じます。
 
 ハンドを閉じた瞬間ターミナルにハンドの座標系から見たボールの相対座標とキャッチ出来たか否かが表示されます。また、キャッチ出来たときはrviz上のボールが停止します。
 
@@ -22,11 +22,14 @@ numpy
 
 ボールの軌跡は放物線を描きますが、マニピュレータは重力も遠心力も受けません。
 
+# 諸々のパラメータ
+現在準備中
+
 # 使い方
 ### 1.コマンドで発射台の位置、姿勢を指定
 下記コマンドで発射台の位置、姿勢を指定します。
 
-コマンド末尾のリスト内、**pos_x**は発射台のx座標(単位はm、-10~10以内)、**pos_z**はz座標(単位はm、-10~0以内)、**att_y**はy軸まわりの角度(弧度法、-4~4)、**att_xz**はxz平面に対する角度(弧度法、0~3.15)を入れてください。
+コマンド末尾のリスト内、**pos_x**は発射台のx座標(単位はm、-10以上10以下)、**pos_z**はz座標(単位はm、-10以上0以下)、**att_y**はy軸まわりの角度(弧度法、-4以上4以下)、**att_xz**はxz平面に対する角度(弧度法、0以上3.15以下)を入れてください。
 ```
 rostopic pub -1 /shooter_state_input std_msgs/Float32MultiArray "layout:
   dim:
@@ -44,7 +47,7 @@ data: [pos_x, pos_z, att_y, att_xz]"
 rostopic pub -1 /shoot_value std_msgs/Float32 "data: v_0"
 ```
 
-# ROSノード、トピック
+# ROSノード、トピック、サービス
 ## ノード、トピックの関係
 ![nodes](./nodes.png)
 
@@ -71,12 +74,12 @@ x座標(m)、z座標(m)、y軸まわりの角度(rad)、xz平面となす角度(
 ### /ball_initial_state
 std_msgs/Float32MultiArray型
 
-発射された瞬間の時刻(s)、xyz座標(m)、速度のxyz成分(m/s)の7個の要素からなります。
+発射された瞬間の時刻(s)、座標(m)、速度(m/s)の7個の要素からなります。
 
 ### /target_arm_state
 std_msgs/Float32MultiArray型
 
-ハンドの目標となるxyz座標(m)、姿勢を表す行列、速度のxyz成分(m/s)、姿勢の微分の24個の要素からなります。
+ハンドの目標となる位置(m)、姿勢を表す行列、速度(m/s)、姿勢の微分の24個の要素からなります。
 
 ### /hand_close_reserve
 std_msgs/Float32型
@@ -120,6 +123,82 @@ float32 time_stamp
 GetHandStateサービスを要求されたときはその時点のハンドの位置、姿勢(を表す行列)、速度、姿勢の微分を返します。
 
 ### shooter_controller_simple
-/shooter_state_inputをsubscribeすると、トピック内データに従い発射台の位置、姿勢を更新、/shooter_stateをpublishします。また、更新の際、動ける範囲("使い方"または"諸々のパラメータ"参照)を超えた値をsubscribeしたならば範囲を超えず、最もsubscribeした値に近い値を使用します。
+/shooter_state_inputをsubscribeすると、トピック内データに従い発射台の位置、姿勢を更新、/shooter_stateをpublishします。また更新の際、動ける範囲("使い方"または"諸々のパラメータ"参照)を超えた値をsubscribeしたならば範囲を超えず、最もsubscribeした値に近い値を使用します。
 
-/shoot_valueをsubscribeすると、
+/shoot_valueをsubscribeすると、トピックから初速を取得し、その時点での発射台の姿勢をもとにボールの初期状態を計算、発射された時間とボールの初期状態を/ball_initial_stateとしてpublishします。
+
+### ball_initial_to_arm_target
+/ball_initial_stateをsubscribeすると、ボールが最高到達点に達する時刻、最高到達点の座標、その時点でのボールが進む向きを計算し、時刻は/hand_close_reserveとして、座標と向きは/target_arm_stateとしてpublishします。
+
+このとき、/target_arm_state内には速度の要素もありますが、これはすべて0にします。(すなわち、マニピュレータには最高到達点で静止するようにします。)
+
+## 各サービスについて
+### GetHandState
+ros3_18c1054/srv/GetHandState型
+
+GetHandState型の定義は以下の通りです。
+
+#### GetHandState.srv
+```
+---
+float32[] hand_state
+```
+
+引数はありません。
+
+戻り値はハンドの位置、姿勢を表す行列、速度、姿勢の微分の24個の要素からなります。
+
+サーバはarm_controllerです。
+
+マニピュレータの各軸の角度、角速度から順運動学でハンドの位置等を計算します。
+
+### GetInitTime
+ros3_18c1054/srv/GetInitTime型
+
+GetInitTime型の定義は以下の通りです。
+
+#### GetInitTime.srv
+```
+---
+int32 year
+int32 month
+int32 day
+int32 hour
+int32 minute
+int32 second
+float32 lower
+```
+
+引数はありません。
+
+戻り値はサーバとなるノードの起動時間に対し、yearは整数部分を12×30×24×60×60で割った商、monthは30×24×60×60で、dayは24×60×60で、hourは60×60で、minuteは60で割った商、secondは60で割った余り、lowerは小数部分です。
+
+サーバはarm_controllerです。
+
+サーバとなるノードの起動時刻をいくつかの値に分割して渡します。
+
+時刻を扱うトピックがいくつかありますが、ROSのpublish、subscribeは上数桁以降に誤差があり、time.time()で取得した値をそのままpublishすると数十秒程度の誤差が出ます。
+
+よって時刻を扱うノードは起動時にあらかじめGetInitTimeサービスを用いarm_controllerノードの起動時刻を取得します。そして時刻を扱うトピックではその時刻からの相対時刻でやりとりします。
+
+そうすることで扱う値が小さくなり誤差の影響が小さくなります。
+
+## デバッグに用いたノード
+#### /ang_debug
+Float32MultiArray型
+
+マニピュレータの各軸の角度(rad)の6つの要素からなります。
+
+arm_controllerはこのトピックをsubscribeすると、トピックで指定された角度を目標にマニピュレータを動かし始めます。
+
+ユーザがコマンドで入力します。
+
+# 諸注意
+arm_controller.pyにはハンドの速度、姿勢の微分の逆運動学に関する部分(ヤコビアンの計算)がありますが、デバッグをしていないので使用しないようにしてください。
+
+具体的には、コマンドを用いて/ang_debugをpublishする際、要素が12個以上のリストをpublishしないでください。
+
+# ライセンス
+MIT License
+
+LICENSEをお読みください。

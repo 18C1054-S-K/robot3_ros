@@ -11,6 +11,9 @@ numpy
 # 配置
 ![screenshot](./images/rviz_screenshot.png)
 
+# 動かしている様子
+現在準備中
+
 # 概要
 コマンドを用いて発射台の位置、姿勢、初速を指定し、ボールを発射します。
 
@@ -27,7 +30,7 @@ numpy
 ### 1.コマンドで発射台の位置、姿勢を指定
 下記コマンドで発射台の位置、姿勢を指定します。
 
-コマンド末尾のリスト内、**pos_x**は発射台のx座標(単位はm、-10以上10以下)、**pos_z**はz座標(単位はm、-10以上0以下)、**att_y**はy軸まわりの角度(弧度法、-4以上4以下)、**att_xz**はxz平面に対する角度(弧度法、0以上3.15以下)を入れてください。
+コマンド末尾のリスト内、**x_shooter**は発射台のx座標(単位はm、-10以上10以下)、**z_shooter**はz座標(単位はm、-10以上0以下)、**phi_shooter**はy軸まわりの角度(弧度法、-4以上4以下)、**psi_shooter**はxz平面に対する角度(弧度法、0以上3.15以下)を入れてください。
 ```
 rostopic pub -1 /shooter_state_input std_msgs/Float32MultiArray "layout:
   dim:
@@ -35,7 +38,7 @@ rostopic pub -1 /shooter_state_input std_msgs/Float32MultiArray "layout:
     size: 4
     stride: 0
   data_offset: 0
-data: [pos_x, pos_z, att_y, att_xz]"
+data: [x_shooter, z_shooter, phi_shooter, psi_shooter]"
 ```
 ### 2.コマンドでボールの初速を指定、発射
 下記コマンドでボールの初速を指定し、発射します。
@@ -69,7 +72,7 @@ rostopic pub -1 /shoot_value std_msgs/Float32 "data: v_0"
 ||y座標|m|0|0|
 ||z座標|m|-10|0|
 ||&phi;\_shooter|rad|-2|2|
-||&psi;\_shooter|rad|0|3.15|
+||&psi;\_shooter|rad|0|1.55|
 
 
 # ボールをキャッチ出来たかの判定について
@@ -205,6 +208,27 @@ Float32MultiArray型
 arm_controllerはこのトピックをsubscribeすると、トピックで指定された角度を目標にマニピュレータを動かし始めます。
 
 ユーザがコマンドで入力します。
+
+
+# 参考にしたサイトなど
+- python関連
+  - [note.nkmk.me](https://note.nkmk.me/python/)
+    - pythonの文法はじめ色々なことが載っているサイトです。
+  - [Qiita, pythonの if \_\_name\_\_ == '\_\_main\_\_':は何のためにあるのか。](https://qiita.com/suiru_nakamura/items/dca13669abdf29404f38)
+  - [あなたのデータサイエンス力を飛躍的に向上させるNumPy徹底入門](https://deepage.net/features/numpy/)
+  - [Python(Numpy)の@（アット）演算子を使って見る話](https://ensekitt.hatenablog.com/entry/2018/07/23/200000)
+- ROS関連
+  - [ja/ROS/Tutorials](http://wiki.ros.org/ja/ROS/Tutorials)
+    - ROS公式のチュートリアルです。
+  - [Qiita, ROS講座00 目次](https://qiita.com/srs/items/5f44440afea0eb616b4a)
+    - だいたいの部分は上の公式チュートリアルとこのサイトを参考に書いています。
+  - [Qiita,【Python】ROSのプログラムをPythonのclassを使ったらとても便利だった](https://qiita.com/koichi_baseball/items/d15d52856188120647f4)
+    - classを使った記法の参考にしました。
+- その他
+  - 「ロボットマニピュレータ」の授業資料
+    - 理論部分の参考にしました。
+
+思い出せるかぎり書き出しましたが、コードを書いてからREADMEを書くまで時間が空いてしまったので書き漏らしがあると思います。申し訳ありません。
 
 
 # 諸注意

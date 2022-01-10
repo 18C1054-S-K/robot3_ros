@@ -12,7 +12,8 @@ numpy
 ![screenshot](./images/rviz_screenshot.png)
 
 # 動かしている様子
-現在準備中
+[youtube](https://www.youtube.com/watch?v=m0Df1BFixgo "https://www.youtube.com/watch?v=m0Df1BFixgo")
+
 
 # 概要
 コマンドを用いて発射台の位置、姿勢、初速を指定し、ボールを発射します。
@@ -27,8 +28,14 @@ numpy
 
 
 # 使い方
-### 1.コマンドで発射台の位置、姿勢を指定
-下記コマンドで発射台の位置、姿勢を指定します。
+### 0.ターミナルを2つ開く
+### 1.ROSを起動
+1つ目のターミナルで下記コマンドを実行します。
+```
+roslaunch robot3_18c1054 ball_catch_simu.launch
+```
+### 2.コマンドで発射台の位置、姿勢を指定
+2つ目のターミナルで下記コマンドで発射台の位置、姿勢を指定します。
 
 コマンド末尾のリスト内、**x_shooter**は発射台のx座標(単位はm、-10以上10以下)、**z_shooter**はz座標(単位はm、-10以上0以下)、**phi_shooter**はy軸まわりの角度(弧度法、-4以上4以下)、**psi_shooter**はxz平面に対する角度(弧度法、0以上3.15以下)を入れてください。
 ```
@@ -40,8 +47,9 @@ rostopic pub -1 /shooter_state_input std_msgs/Float32MultiArray "layout:
   data_offset: 0
 data: [x_shooter, z_shooter, phi_shooter, psi_shooter]"
 ```
-### 2.コマンドでボールの初速を指定、発射
-下記コマンドでボールの初速を指定し、発射します。
+### 3.コマンドでボールの初速を指定、発射
+2つ目のターミナルで下記コマンドでボールの初速を指定し、発射します。
+
 コマンド末尾の **v_0** に発射した瞬間の速さ(単位はm/s)を入れてください。その速さでボールが発射されます。
 ```
 rostopic pub -1 /shoot_value std_msgs/Float32 "data: v_0"
@@ -49,6 +57,8 @@ rostopic pub -1 /shoot_value std_msgs/Float32 "data: v_0"
 
 
 # 諸々のパラメータ
+### 重力定数
+9.8m/s^2
 ### マニピュレータ
 ![arm](./images/arm.png)
 
@@ -212,17 +222,17 @@ arm_controllerはこのトピックをsubscribeすると、トピックで指定
 
 # 参考にしたサイトなど
 - python関連
-  - [note.nkmk.me](https://note.nkmk.me/python/)
+  - [note.nkmk.me](https://note.nkmk.me/python/ "https://note.nkmk.me/python/")
     - pythonの文法はじめ色々なことが載っているサイトです。
-  - [Qiita, pythonの if \_\_name\_\_ == '\_\_main\_\_':は何のためにあるのか。](https://qiita.com/suiru_nakamura/items/dca13669abdf29404f38)
-  - [あなたのデータサイエンス力を飛躍的に向上させるNumPy徹底入門](https://deepage.net/features/numpy/)
-  - [Python(Numpy)の@（アット）演算子を使って見る話](https://ensekitt.hatenablog.com/entry/2018/07/23/200000)
+  - [Qiita, pythonの if \_\_name\_\_ == '\_\_main\_\_':は何のためにあるのか。](https://qiita.com/suiru_nakamura/items/dca13669abdf29404f38 "https://qiita.com/suiru_nakamura/items/dca13669abdf29404f38")
+  - [あなたのデータサイエンス力を飛躍的に向上させるNumPy徹底入門](https://deepage.net/features/numpy/ "https://deepage.net/features/numpy/")
+  - [Python(Numpy)の@（アット）演算子を使って見る話](https://ensekitt.hatenablog.com/entry/2018/07/23/200000 "https://ensekitt.hatenablog.com/entry/2018/07/23/200000")
 - ROS関連
-  - [ja/ROS/Tutorials](http://wiki.ros.org/ja/ROS/Tutorials)
+  - [ja/ROS/Tutorials](http://wiki.ros.org/ja/ROS/Tutorials "http://wiki.ros.org/ja/ROS/Tutorials")
     - ROS公式のチュートリアルです。
-  - [Qiita, ROS講座00 目次](https://qiita.com/srs/items/5f44440afea0eb616b4a)
+  - [Qiita, ROS講座00 目次](https://qiita.com/srs/items/5f44440afea0eb616b4a "https://qiita.com/srs/items/5f44440afea0eb616b4a")
     - だいたいの部分は上の公式チュートリアルとこのサイトを参考に書いています。
-  - [Qiita,【Python】ROSのプログラムをPythonのclassを使ったらとても便利だった](https://qiita.com/koichi_baseball/items/d15d52856188120647f4)
+  - [Qiita,【Python】ROSのプログラムをPythonのclassを使ったらとても便利だった](https://qiita.com/koichi_baseball/items/d15d52856188120647f4 "https://qiita.com/koichi_baseball/items/d15d52856188120647f4")
     - classを使った記法の参考にしました。
 - その他
   - 「ロボットマニピュレータ」の授業資料
